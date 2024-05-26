@@ -40,6 +40,11 @@ void Engine::run()
 
         // Poll for and process events 
         glfwPollEvents();
+
+        if (glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(m_pWindow, GLFW_TRUE);
+        }
     }
 
     glfwTerminate();
