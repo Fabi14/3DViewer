@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "DebugOutput.h"
 
 bool Engine::init()
 {
@@ -8,6 +9,12 @@ bool Engine::init()
 
 
     // Create a windowed mode window and its OpenGL context 
+
+#ifdef _DEBUG
+    //  create OpenGL in debug mode (required for DebugOutput)
+    glfwWindowHint(GLFW_CONTEXT_DEBUG, true);
+#endif
+
     m_pWindow = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
     if (!m_pWindow)
     {
@@ -24,6 +31,10 @@ bool Engine::init()
         glfwTerminate();
         return false;
     }
+
+#ifdef _DEBUG
+    DebugOutput::enable();
+#endif
     return true;
 }
 
@@ -32,7 +43,10 @@ void Engine::run()
     //Loop until the user closes the window 
     while (!glfwWindowShouldClose(m_pWindow))
     {
-        // Render here 
+        // set clear color
+        glClearColor(0.f, 0.f, 0.5f, 1.0f);
+
+        // clear buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Swap front and back buffers 
