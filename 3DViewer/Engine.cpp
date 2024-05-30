@@ -1,5 +1,11 @@
 #include "Engine.h"
+
+#include <glm/glm.hpp>
 #include "DebugOutput.h"
+#include "Vertex.h"
+#include "Shader.h"
+#include "ShaderProgram.h"
+#include "VertexBuffer.h"
 
 bool Engine::init()
 {
@@ -35,7 +41,32 @@ bool Engine::init()
 #ifdef _DEBUG
     DebugOutput::enable();
 #endif
+
+    // set clear color
+    glClearColor(0.f, 0.f, 0.5f, 1.0f);
+
+    //init and bind Shader and VertexArrayObject for first triangle
+    initTriangle();
+
     return true;
+}
+
+void Engine::initTriangle()
+{
+    std::vector<Vertex> triangleVertices{
+        Vertex{ .pos{ -0.5f,-0.5f,0.f } }
+        ,Vertex{ .pos{ 0.5f,-0.5f,0.f } }
+        ,Vertex{ .pos{ 0.f,0.5f,0.f } }
+    };
+    VertexBuffer vertexArrayObject{ triangleVertices };
+    
+    const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
+    const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
+
+    m_triangle = Triangle{
+        ShaderProgram{ vertexShader, fragmentShader }
+        , std::move(vertexArrayObject)
+    };
 }
 
 void Engine::run()
@@ -43,11 +74,8 @@ void Engine::run()
     //Loop until the user closes the window 
     while (!glfwWindowShouldClose(m_pWindow))
     {
-        // set clear color
-        glClearColor(0.f, 0.f, 0.5f, 1.0f);
-
-        // clear buffer
-        glClear(GL_COLOR_BUFFER_BIT);
+        // clear buffer and draw triangle
+        draw();
 
         // Swap front and back buffers 
         glfwSwapBuffers(m_pWindow);
@@ -62,4 +90,16 @@ void Engine::run()
     }
 
     glfwTerminate();
+}
+
+void Engine::draw()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    if (m_triangle)
+    {
+        m_triangle->m_vertexBuffer.bind();
+        m_triangle->m_shaderProgram.use();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
 }
