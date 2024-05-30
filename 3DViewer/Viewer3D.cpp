@@ -17,9 +17,9 @@ void Viewer3D::onUpdate()
 void Viewer3D::initTriangle()
 {
     std::vector<Vertex> triangleVertices{
-        Vertex{.pos{ -0.5f,-0.5f,0.f } }
-        ,Vertex{.pos{ 0.5f,-0.5f,0.f } }
-        ,Vertex{.pos{ 0.f,0.5f,0.f } }
+         Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
+        ,Vertex{.pos{ 0.5f,-0.5f,0.f },.col{0.f,1.f,0.f,1.f}  }
+        ,Vertex{.pos{ 0.f,0.5f,0.f },.col{0.f,0.f,1.f,1.f} }
     };
     VertexBuffer vertexArrayObject{ triangleVertices };
 
