@@ -13,31 +13,37 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Shader">
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{0f10f808-c6c7-4a7e-9acd-afc60d0cdfcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Shader">
       <UniqueIdentifier>{9c7454c1-ad72-445f-b090-b150f9d82abf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3DViewer.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine.cpp">
+    <ClCompile Include="Viewer3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DebugOutput.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="UniqueResource.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,13 +68,16 @@
     <ClInclude Include="UniqueResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Viewer3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="VertexShader.glsl">
-      <Filter>Source Files\Shader</Filter>
+      <Filter>Source Files\Engine\Shader</Filter>
     </None>
     <None Include="FragmentShader.glsl">
-      <Filter>Source Files\Shader</Filter>
+      <Filter>Source Files\Engine\Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

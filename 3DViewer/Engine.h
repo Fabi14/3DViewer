@@ -9,20 +9,15 @@
 class Engine
 {
 public:
+    virtual ~Engine() = default;
+
     bool init();
     void run();
 
 private:
-    void draw();
-    void initTriangle();
+    virtual void onCreate() = 0;
+    virtual void onUpdate() = 0;
 
     GLFWwindow* m_pWindow;
-
-    struct Triangle
-    {
-        ShaderProgram m_shaderProgram;
-        VertexBuffer m_vertexBuffer;
-    };
-    std::optional<Triangle> m_triangle{ std::nullopt };
 };
 
