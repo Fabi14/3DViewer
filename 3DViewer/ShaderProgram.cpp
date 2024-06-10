@@ -8,6 +8,7 @@ ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentS
 	glAttachShader(*m_id, fragmentShader.get());
 
 	glLinkProgram(*m_id);
+	glValidateProgram(*m_id);
 
 	glDetachShader(*m_id, vertexShader.get());
 	glDetachShader(*m_id, fragmentShader.get());
