@@ -6,7 +6,7 @@ class Viewer3D : public Engine
 	void onCreate() override;
 	void onUpdate() override;
 
-    void initTriangle();
+    void initTriangles();
     void draw();
 
     struct Triangle

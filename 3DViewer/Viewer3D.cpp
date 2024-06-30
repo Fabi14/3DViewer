@@ -22,7 +22,7 @@ void Viewer3D::onCreate()
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
     std::println("{}", getGlInfoString());
 
-    initTriangle();
+    initTriangles();
 }
 
 void Viewer3D::onUpdate()
@@ -30,12 +30,15 @@ void Viewer3D::onUpdate()
     draw();
 }
 
-void Viewer3D::initTriangle()
+void Viewer3D::initTriangles()
 {
     std::vector<Vertex> triangleVertices{
-         Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
-        ,Vertex{.pos{ 0.5f,-0.5f,0.f },.col{0.f,1.f,0.f,1.f}  }
-        ,Vertex{.pos{ 0.f,0.5f,0.f },.col{0.f,0.f,1.f,1.f} }
+         Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,1.f,1.f} }
+        ,Vertex{.pos{ 0.5f,-0.5f,0.f },.col{1.f,1.f,0.f,1.f}  }
+        ,Vertex{.pos{ 0.5f,0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
+        ,Vertex{.pos{ 0.5f,0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
+        ,Vertex{.pos{ -0.5f,0.5f,0.f },.col{1.f,1.f,0.f,1.f}  }
+        ,Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,1.f,1.f} }
     };
     VertexBuffer vertexArrayObject{ triangleVertices };
 
@@ -56,6 +59,6 @@ void Viewer3D::draw()
     {
         m_triangle->m_vertexBuffer.bind();
         m_triangle->m_shaderProgram.use();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 }
