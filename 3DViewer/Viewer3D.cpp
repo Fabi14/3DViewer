@@ -1,10 +1,26 @@
 #include "Viewer3D.h"
 #include "Shader.h"
+#include <sstream>
+#include <print>
+
+namespace {
+    std::string getGlInfoString()
+    {
+        std::stringstream info;
+        info << "VENDOR: " << glGetString(GL_VENDOR) << '\n';
+        info << "VERSION: " << glGetString(GL_VERSION) << '\n';
+        //info << "RENDERER: " << glGetString(GL_RENDERER) << '\n';
+        info << "SHADING_LANGUAGE_VERSION: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << '\n';
+        return info.str();
+    }
+}
+
 
 void Viewer3D::onCreate()
 {
     // set clear color
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
+    std::println("{}", getGlInfoString());
 
     initTriangle();
 }
