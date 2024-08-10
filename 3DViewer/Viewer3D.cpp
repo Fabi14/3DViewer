@@ -15,15 +15,19 @@ namespace {
         return info.str();
     }
 
-    std::vector<Vertex> getTriangleVertices()
+    Mesh getQuadMesh()
     {
-        return std::vector<Vertex>{
-             Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,1.f,1.f} }
-            ,Vertex{.pos{ 0.5f,-0.5f,0.f },.col{1.f,1.f,0.f,1.f}  }
-            ,Vertex{.pos{ 0.5f,0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
-            ,Vertex{.pos{ 0.5f,0.5f,0.f },.col{1.f,0.f,0.f,1.f} }
-            ,Vertex{.pos{ -0.5f,0.5f,0.f },.col{1.f,1.f,0.f,1.f}  }
-            ,Vertex{.pos{ -0.5f,-0.5f,0.f },.col{1.f,0.f,1.f,1.f} }
+        return Mesh{ 
+            {   // vertices
+                //			pos						color					normal
+                { {-0.5f, -0.5f, 0.0f}, {0.0f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f}},
+                { {-0.5f,  0.5f, 0.0f},	{1.0f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f} },
+                { { 0.5f,  0.5f, 0.0f},	{0.5f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f} },
+                { { 0.5f, -0.5f, 0.0f},	{0.0f,0.5f,1.0f,1.0f},   {0.0f, 0.0f, 1.0f} },
+            },
+            {   // indices
+                0,3,2,0,2,1
+            } 
         };
     }
 }
@@ -45,9 +49,9 @@ void Viewer3D::onUpdate()
 
 void Viewer3D::initTriangles()
 {
-    Mesh triangle{ getTriangleVertices() };
+    Mesh quad{ getQuadMesh() };
 
-    VertexBuffer vertexArrayObject{ triangle.m_vertices };
+    VertexBuffer vertexArrayObject{ quad.m_vertices, quad.m_indices };
 
     const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
     const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
@@ -66,6 +70,6 @@ void Viewer3D::draw()
     {
         m_triangle->m_vertexBuffer.bind();
         m_triangle->m_shaderProgram.use();
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, m_triangle->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }
 }
