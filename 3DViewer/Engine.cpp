@@ -42,7 +42,8 @@ bool Engine::init()
 #ifdef _DEBUG
     DebugOutput::enable();
 #endif
-
+    glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
     onCreate();
 
     return true;
