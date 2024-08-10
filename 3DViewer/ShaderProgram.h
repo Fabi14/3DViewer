@@ -12,6 +12,7 @@ public:
 	ShaderProgram() :m_id{} {}
 	void use() const;
 
+	GLuint get() { return *m_id; }
 private:
 	UniqueResource m_id{ glCreateProgram(),[](GLuint id){ glDeleteProgram(id); }};
 };

@@ -39,7 +39,7 @@ void Viewer3D::onCreate()
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
     std::println("{}", getGlInfoString());
 
-    initTriangles();
+    initQuad();
 }
 
 void Viewer3D::onUpdate()
@@ -47,7 +47,7 @@ void Viewer3D::onUpdate()
     draw();
 }
 
-void Viewer3D::initTriangles()
+void Viewer3D::initQuad()
 {
     Mesh quad{ getQuadMesh() };
 
@@ -56,20 +56,27 @@ void Viewer3D::initTriangles()
     const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
     const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
 
-    m_triangle = Triangle{
-        ShaderProgram{ vertexShader, fragmentShader }
-        , std::move(vertexArrayObject)
+    m_quad = Renderable{
+        .m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader },
+        .m_vertexBuffer = std::move(vertexArrayObject)
     };
+
+    m_quad->m_modelTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "model");
 }
 
 void Viewer3D::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (m_triangle)
+    if (m_quad) // TODO: move code into Renderable
     {
-        m_triangle->m_vertexBuffer.bind();
-        m_triangle->m_shaderProgram.use();
-        glDrawElements(GL_TRIANGLES, m_triangle->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+        m_quad->m_vertexBuffer.bind();
+        m_quad->m_shaderProgram.use();
+
+        float angle{2.f};  // TODO: use deltaTime  (glfwGetTime())
+        m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+        glUniformMatrix4fv(m_quad->m_modelTransformID, 1, GL_FALSE, &m_quad->m_modelTransform[0][0]);
+
+        glDrawElements(GL_TRIANGLES, m_quad->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }
 }
