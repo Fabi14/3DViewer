@@ -61,7 +61,14 @@ void Viewer3D::initQuad()
         .m_vertexBuffer = std::move(vertexArrayObject)
     };
 
-    m_quad->m_modelTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "model");
+    m_quad->m_modelTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "modelTransform");
+    m_quad->m_modelNormalTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "modelNormalTransform");
+
+    // light
+    m_lightDirID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "lightDir");
+    const glm::vec3 lightDir{ glm::vec3(0.0f, 0.0f, 1.0f) };
+    m_quad->m_shaderProgram.use();
+    glUniform3fv(m_lightDirID, 1, &lightDir.x);
 }
 
 void Viewer3D::draw()
@@ -77,6 +84,9 @@ void Viewer3D::draw()
         m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(m_quad->m_modelTransformID, 1, GL_FALSE, &m_quad->m_modelTransform[0][0]);
 
-        glDrawElements(GL_TRIANGLES, m_quad->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+        auto normalTransform = glm::inverse(glm::mat3(m_quad->m_modelTransform));
+        glUniformMatrix3fv(m_quad->m_modelNormalTransformID, 1, GL_FALSE, &normalTransform[0][0]);
+
+        glDrawElements(GL_TRIANGLES,m_quad->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }
 }

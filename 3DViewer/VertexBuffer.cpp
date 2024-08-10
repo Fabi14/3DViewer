@@ -18,7 +18,7 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
 VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices) :
     VertexBuffer(vecVertices)
 {
-    m_indexCount = vecIndices.size();
+    m_indexCount = static_cast<GLsizei>(vecIndices.size());
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(Index), vecIndices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

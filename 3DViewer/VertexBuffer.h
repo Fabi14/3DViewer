@@ -12,7 +12,7 @@ public:
 	VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices);
 
 	void bind();
-	size_t getIndexCount()
+	GLsizei getIndexCount()
 	{
 		return m_indexCount;
 	}
@@ -27,6 +27,6 @@ private:
 	UniqueResource m_vbo{ createBuffer(), &deleteBuffer };
 	UniqueResource m_ebo{ createBuffer(), &deleteBuffer };
 
-	size_t m_indexCount{};
+	GLsizei m_indexCount{};
 };
 
