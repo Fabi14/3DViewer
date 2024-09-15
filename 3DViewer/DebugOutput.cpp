@@ -1,4 +1,5 @@
 #include "DebugOutput.h"
+#include <string>
 #include <print>
 #include <glad/glad.h>
 
@@ -32,4 +33,9 @@ void DebugOutput::enable()
     {
         std::println("No GLFW_OPENGL_DEBUG_CONTEXT");
     }
+}
+
+void DebugOutput::printDebugMessage(const std::string& message)
+{
+    std::println("{}",message);
 }

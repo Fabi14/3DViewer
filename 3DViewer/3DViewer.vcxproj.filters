@@ -48,6 +48,9 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MeshImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -77,6 +80,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MeshImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="VertexShader.glsl">
@@ -84,6 +90,9 @@
     </None>
     <None Include="FragmentShader.glsl">
       <Filter>Source Files\Engine\Shader</Filter>
+    </None>
+    <None Include="teapot.stl">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>

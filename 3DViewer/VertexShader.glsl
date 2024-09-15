@@ -12,6 +12,6 @@ uniform mat3 modelNormalTransform;
 void main()
 {
     gl_Position = modelTransform * vec4(_pos, 1.0);
-    vertexNormal = modelNormalTransform * _nor;
+    vertexNormal = normalize(modelNormalTransform * _nor);
     vertexColor = _col;
 }

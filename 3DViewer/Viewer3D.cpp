@@ -3,6 +3,7 @@
 #include <sstream>
 #include <print>
 #include "Mesh.h"
+#include "MeshImporter.h"
 
 namespace {
     std::string getGlInfoString()
@@ -40,6 +41,13 @@ void Viewer3D::onCreate()
     std::println("{}", getGlInfoString());
 
     initQuad();
+
+    initTeapot();
+}
+
+void Viewer3D::initTeapot()
+{
+    //MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl");
 }
 
 void Viewer3D::onUpdate()
@@ -49,7 +57,7 @@ void Viewer3D::onUpdate()
 
 void Viewer3D::initQuad()
 {
-    Mesh quad{ getQuadMesh() };
+    Mesh quad{ MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
 
     VertexBuffer vertexArrayObject{ quad.m_vertices, quad.m_indices };
 
@@ -66,14 +74,18 @@ void Viewer3D::initQuad()
 
     // light
     m_lightDirID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "lightDir");
-    const glm::vec3 lightDir{ glm::vec3(0.0f, 0.0f, 1.0f) };
+    const glm::vec3 lightDir{ glm::vec3(.0f, .0f, -1.0f) };
     m_quad->m_shaderProgram.use();
     glUniform3fv(m_lightDirID, 1, &lightDir.x);
+
+    float angle{ 75.f }; 
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-15.f), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void Viewer3D::draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_quad) // TODO: move code into Renderable
     {
@@ -84,7 +96,7 @@ void Viewer3D::draw()
         m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(m_quad->m_modelTransformID, 1, GL_FALSE, &m_quad->m_modelTransform[0][0]);
 
-        auto normalTransform = glm::inverse(glm::mat3(m_quad->m_modelTransform));
+        auto normalTransform = glm::transpose(glm::inverse(glm::mat3(m_quad->m_modelTransform)));
         glUniformMatrix3fv(m_quad->m_modelNormalTransformID, 1, GL_FALSE, &normalTransform[0][0]);
 
         glDrawElements(GL_TRIANGLES,m_quad->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
