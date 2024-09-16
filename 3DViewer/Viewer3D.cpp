@@ -31,6 +31,60 @@ namespace {
             } 
         };
     }
+
+
+    Mesh getCubeMesh()
+    {
+        return Mesh{
+            {
+                //front
+                {{-0.5f, -0.5f, 0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
+                {{-0.5f,  0.5f, 0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
+                {{ 0.5f,  0.5f, 0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
+                {{ 0.5f, -0.5f, 0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 0.0f, 1.0f}},
+
+                //back	  
+                {{ 0.5f, -0.5f,-0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
+                {{ 0.5f,  0.5f,-0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
+                {{-0.5f,  0.5f,-0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
+                {{-0.5f, -0.5f,-0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 0.0f, -1.0f}},
+
+                //left
+                {{-0.5f, -0.5f, -0.5f},	{0.0f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
+                {{-0.5f,  0.5f, -0.5f},	{1.0f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
+                {{-0.5f,  0.5f,  0.5f},	{0.5f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
+                {{-0.5f, -0.5f,  0.5f},	{0.0f,0.5f,1.0f,1.0f}, {-1.0f, 0.0f, 0.0f}},
+
+                //right
+                {{0.5f, -0.5f,  0.5f},	{0.0f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
+                {{0.5f,  0.5f,  0.5f},	{1.0f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
+                {{0.5f,  0.5f, -0.5f},	{0.5f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
+                {{0.5f, -0.5f, -0.5f},	{0.0f,0.5f,1.0f,1.0f}, {1.0f, 0.0f, 0.0f}},
+
+                //top
+                {{-0.5f, 0.5f,  0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
+                {{-0.5f, 0.5f, -0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
+                {{ 0.5f, 0.5f, -0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
+                {{ 0.5f, 0.5f,  0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 1.0f, 0.0f}},
+
+                //bottom
+                {{-0.5f, -0.5f, -0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
+                {{-0.5f, -0.5f,  0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
+                {{ 0.5f, -0.5f,  0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
+                {{ 0.5f, -0.5f, -0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, -1.0f, 0.0f}},
+            },
+            {
+
+                0,3,2,0,2,1,
+                0 + 4,3 + 4,2 + 4,0 + 4,2 + 4,1 + 4,
+                0 + 8,3 + 8,2 + 8,0 + 8,2 + 8,1 + 8,
+                0 + 12,3 + 12,2 + 12,0 + 12,2 + 12,1 + 12,
+                0 + 16,3 + 16,2 + 16,0 + 16,2 + 16,1 + 16,
+                0 + 20,3 + 20,2 + 20,0 + 20,2 + 20,1 + 20,
+            } 
+        };
+
+    }
 }
 
 
@@ -53,16 +107,18 @@ void Viewer3D::initTeapot()
 void Viewer3D::onUpdate()
 {
     float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .2f));
 
     draw();
 }
 
 void Viewer3D::initQuad()
 {
-    Mesh quad{ MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
+    Mesh mesh{ MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
+   //Mesh mesh{ getCubeMesh() };
 
-    VertexBuffer vertexArrayObject{ quad.m_vertices, quad.m_indices };
+
+    VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
 
     const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
     const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
@@ -77,13 +133,13 @@ void Viewer3D::initQuad()
 
     // light
     m_lightDirID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "lightDir");
-    const glm::vec3 lightDir{ glm::vec3(1.0f, 1.0f, -1.0f) };
+    const glm::vec3 lightDir{ glm::vec3(0.3f,.2f, -1.0f) };
     m_quad->m_shaderProgram.use();
     glUniform3fv(m_lightDirID, 1, &lightDir.x);
 
     float angle{ 0.f }; 
     m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-10.f), glm::vec3(1.0f, 0.0f, 1.0f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-15.f), glm::vec3(1.0f, 0.0f, .0f));
 }
 
 void Viewer3D::draw()
