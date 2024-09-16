@@ -46,7 +46,7 @@ std::optional<Mesh> MeshImporter::DoTheImportThing(const std::string& pFile) {
     for (const auto [i, vertex] : std::views::enumerate(std::span{ pMesh->mVertices, pMesh->mNumVertices }))
     {
         mesh.m_vertices.push_back({ .pos = toVec3(vertex),
-                                    .col = glm::vec4{0.2f,0.2f,0.2f,1.f},
+                                    .col = glm::vec4{1.0f,0.0f,0.0f,1.f},
                                     .normal = toVec3(pMesh->mNormals[i])});
     }
 

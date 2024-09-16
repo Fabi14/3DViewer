@@ -52,6 +52,9 @@ void Viewer3D::initTeapot()
 
 void Viewer3D::onUpdate()
 {
+    float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+
     draw();
 }
 
@@ -74,13 +77,13 @@ void Viewer3D::initQuad()
 
     // light
     m_lightDirID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "lightDir");
-    const glm::vec3 lightDir{ glm::vec3(.0f, .0f, -1.0f) };
+    const glm::vec3 lightDir{ glm::vec3(1.0f, 1.0f, -1.0f) };
     m_quad->m_shaderProgram.use();
     glUniform3fv(m_lightDirID, 1, &lightDir.x);
 
-    float angle{ 75.f }; 
+    float angle{ 0.f }; 
     m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-15.f), glm::vec3(0.0f, 0.0f, 1.0f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-10.f), glm::vec3(1.0f, 0.0f, 1.0f));
 }
 
 void Viewer3D::draw()
@@ -92,8 +95,6 @@ void Viewer3D::draw()
         m_quad->m_vertexBuffer.bind();
         m_quad->m_shaderProgram.use();
 
-        float angle{2.f};  // TODO: use deltaTime  (glfwGetTime())
-        m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(m_quad->m_modelTransformID, 1, GL_FALSE, &m_quad->m_modelTransform[0][0]);
 
         auto normalTransform = glm::transpose(glm::inverse(glm::mat3(m_quad->m_modelTransform)));
