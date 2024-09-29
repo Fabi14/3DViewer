@@ -16,23 +16,6 @@ namespace {
         return info.str();
     }
 
-    Mesh getQuadMesh()
-    {
-        return Mesh{ 
-            {   // vertices
-                //			pos						color					normal
-                { {-0.5f, -0.5f, 0.0f}, {0.0f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f}},
-                { {-0.5f,  0.5f, 0.0f},	{1.0f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f} },
-                { { 0.5f,  0.5f, 0.0f},	{0.5f,0.5f,0.1f,1.0f},   {0.0f, 0.0f, 1.0f} },
-                { { 0.5f, -0.5f, 0.0f},	{0.0f,0.5f,1.0f,1.0f},   {0.0f, 0.0f, 1.0f} },
-            },
-            {   // indices
-                0,3,2,0,2,1
-            } 
-        };
-    }
-
-
     Mesh getCubeMesh()
     {
         return Mesh{
@@ -83,7 +66,6 @@ namespace {
                 0 + 20,3 + 20,2 + 20,0 + 20,2 + 20,1 + 20,
             } 
         };
-
     }
 }
 
@@ -94,69 +76,50 @@ void Viewer3D::onCreate()
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
     std::println("{}", getGlInfoString());
 
-    initQuad();
-
-    initTeapot();
-}
-
-void Viewer3D::initTeapot()
-{
-    //MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl");
+    initCube();
 }
 
 void Viewer3D::onUpdate()
 {
     float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .0f));
+    m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .0f));
 
     draw();
 }
 
-void Viewer3D::initQuad()
+void Viewer3D::initCube()
 {
-   //Mesh mesh{ MeshImporter::importFile("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
-   //Mesh mesh{ MeshImporter::importFile("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Sphere.fbx").value() };
-   Mesh mesh{ getCubeMesh() };
-
+    Mesh mesh{ getCubeMesh() };
 
     VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
 
     const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
     const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
 
-    m_quad = Renderable{
+    m_cube = Renderable{
         .m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader },
         .m_vertexBuffer = std::move(vertexArrayObject)
     };
 
-    m_quad->m_modelTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "modelTransform");
-    m_quad->m_modelNormalTransformID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "modelNormalTransform");
+    m_cube->m_modelTransformID = glGetUniformLocation(m_cube->m_shaderProgram.get(), "modelTransform");
 
-    // light
-    m_lightDirID = glGetUniformLocation(m_quad->m_shaderProgram.get(), "lightDir");
-    const glm::vec3 lightDir{ glm::vec3(0.3f,.2f, -1.0f) };
-    m_quad->m_shaderProgram.use();
-    glUniform3fv(m_lightDirID, 1, &lightDir.x);
-
-    float angle{ 0.f }; 
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-30.f), glm::vec3(1.0f, 0.0f, .0f));
+    
+    float angle{ 0.f };
+    //m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(-30.f), glm::vec3(1.0f, 0.0f, .0f));
 }
 
 void Viewer3D::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_quad) // TODO: move code into Renderable
+    if (m_cube) // TODO: move code into Renderable
     {
-        m_quad->m_vertexBuffer.bind();
-        m_quad->m_shaderProgram.use();
+        m_cube->m_vertexBuffer.bind();
+        m_cube->m_shaderProgram.use();
 
-        glUniformMatrix4fv(m_quad->m_modelTransformID, 1, GL_FALSE, &m_quad->m_modelTransform[0][0]);
+        glUniformMatrix4fv(m_cube->m_modelTransformID, 1, GL_FALSE, &m_cube->m_modelTransform[0][0]);
 
-        auto normalTransform = glm::transpose(glm::inverse(glm::mat3(m_quad->m_modelTransform)));
-        glUniformMatrix3fv(m_quad->m_modelNormalTransformID, 1, GL_FALSE, &normalTransform[0][0]);
-
-        glDrawElements(GL_TRIANGLES,m_quad->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES,m_cube->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }
 }

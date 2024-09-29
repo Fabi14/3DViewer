@@ -9,8 +9,7 @@ class Viewer3D : public Engine
 	void onUpdate() override;
 
 private:
-    void initQuad();
-    void initTeapot();
+    void initCube();
     void draw();
 
     struct Renderable
@@ -18,16 +17,10 @@ private:
         ShaderProgram m_shaderProgram;
         VertexBuffer m_vertexBuffer;
 
-        glm::mat4 m_modelTransform{ []() { 
-            auto transform {glm::scale(glm::mat4{ 1.0f }, glm::vec3{0.5f,0.5f,0.5f})};
-            //transform = glm::translate(transform, glm::vec3{ 0.f,0.f,2.f });
-            return transform;
-        }() };
+        glm::mat4 m_modelTransform{ glm::scale(glm::mat4{ 1.0f }, glm::vec3{0.5f,0.5f,0.5f}) };
         GLuint m_modelTransformID{};
-
-        GLuint m_modelNormalTransformID{};
     };
-    std::optional<Renderable> m_quad{ std::nullopt };
+    std::optional<Renderable> m_cube{ std::nullopt };
 
     GLuint m_lightDirID{};
 };
