@@ -116,6 +116,7 @@ void Viewer3D::initQuad()
 {
     Mesh mesh{ MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
    //Mesh mesh{ getCubeMesh() };
+   //Mesh mesh{ MeshImporter::importFile("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Sphere.fbx").value() };
 
 
     VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
