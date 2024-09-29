@@ -107,16 +107,16 @@ void Viewer3D::initTeapot()
 void Viewer3D::onUpdate()
 {
     float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .2f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .0f));
 
     draw();
 }
 
 void Viewer3D::initQuad()
 {
-    Mesh mesh{ MeshImporter::DoTheImportThing("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
-   //Mesh mesh{ getCubeMesh() };
+   //Mesh mesh{ MeshImporter::importFile("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Teapot.stl").value()};
    //Mesh mesh{ MeshImporter::importFile("C:\\Users\\fabia\\source\\repos\\3DViewer\\3DViewer\\Sphere.fbx").value() };
+   Mesh mesh{ getCubeMesh() };
 
 
     VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
@@ -140,7 +140,7 @@ void Viewer3D::initQuad()
 
     float angle{ 0.f }; 
     m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-15.f), glm::vec3(1.0f, 0.0f, .0f));
+    m_quad->m_modelTransform = glm::rotate(m_quad->m_modelTransform, glm::radians(-30.f), glm::vec3(1.0f, 0.0f, .0f));
 }
 
 void Viewer3D::draw()

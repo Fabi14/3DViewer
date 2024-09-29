@@ -20,7 +20,7 @@ namespace
     }
 }
 
-std::optional<Mesh> MeshImporter::DoTheImportThing(const std::string& pFile) {
+std::optional<Mesh> MeshImporter::importFile(const std::string& pFile) {
     // Create an instance of the Importer class
     Assimp::Importer importer;
 
@@ -43,7 +43,7 @@ std::optional<Mesh> MeshImporter::DoTheImportThing(const std::string& pFile) {
 
     Mesh mesh;
     mesh.m_vertices.reserve(pMesh->mNumVertices);
-    for (const auto [i, vertex] : std::views::enumerate(std::span{ pMesh->mVertices, pMesh->mNumVertices }))
+    for (const auto&& [i, vertex] : std::views::enumerate(std::span{ pMesh->mVertices, pMesh->mNumVertices }))
     {
         mesh.m_vertices.push_back({ .pos = toVec3(vertex),
                                     .col = glm::vec4{1.0f,0.0f,0.0f,1.f},

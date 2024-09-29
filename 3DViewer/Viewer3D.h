@@ -18,7 +18,11 @@ private:
         ShaderProgram m_shaderProgram;
         VertexBuffer m_vertexBuffer;
 
-        glm::mat4 m_modelTransform{ glm::scale(glm::mat4{ 1.0f }, glm::vec3{0.3f,0.3f,0.3f}) };
+        glm::mat4 m_modelTransform{ []() { 
+            auto transform {glm::scale(glm::mat4{ 1.0f }, glm::vec3{0.5f,0.5f,0.5f})};
+            //transform = glm::translate(transform, glm::vec3{ 0.f,0.f,2.f });
+            return transform;
+        }() };
         GLuint m_modelTransformID{};
 
         GLuint m_modelNormalTransformID{};

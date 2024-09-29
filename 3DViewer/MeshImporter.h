@@ -6,6 +6,6 @@
 class MeshImporter
 {
 public:
-    static std::optional<Mesh> DoTheImportThing(const std::string& pFile);
+    static std::optional<Mesh> importFile(const std::string& pFile);
 };
 
