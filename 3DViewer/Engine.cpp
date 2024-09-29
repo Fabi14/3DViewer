@@ -8,6 +8,13 @@
 #include "ShaderProgram.h"
 #include "VertexBuffer.h"
 
+namespace {
+    void onSize(GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    }
+}
+
 bool Engine::init()
 {
     // Initialize the library 
@@ -22,12 +29,14 @@ bool Engine::init()
     glfwWindowHint(GLFW_CONTEXT_DEBUG, true);
 #endif
 
-    m_pWindow = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
+    m_pWindow = glfwCreateWindow(640, 480, "Graphics Programming", nullptr, nullptr);
     if (!m_pWindow)
     {
         glfwTerminate();
         return false;
     }
+    glfwSetWindowPos(m_pWindow, 4000, 1500);
+    glfwSetWindowSizeCallback(m_pWindow, onSize);
 
     // Make the window's context current 
     glfwMakeContextCurrent(m_pWindow);
