@@ -102,7 +102,7 @@ void Viewer3D::initCube()
     };
 
     m_cube->m_modelTransformID = glGetUniformLocation(m_cube->m_shaderProgram.get(), "modelTransform");
-
+    m_cube->m_modelTransformNormalID = glGetUniformLocation(m_cube->m_shaderProgram.get(), "modelTransformNormal");
     
     float angle{ 0.f };
     //m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -119,6 +119,9 @@ void Viewer3D::draw()
         m_cube->m_shaderProgram.use();
 
         glUniformMatrix4fv(m_cube->m_modelTransformID, 1, GL_FALSE, &m_cube->m_modelTransform[0][0]);
+
+        auto normalMatrix{glm::inverse(glm::mat3(m_cube->m_modelTransformID)) };
+        glUniformMatrix3fv(m_cube->m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
 
         glDrawElements(GL_TRIANGLES,m_cube->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }

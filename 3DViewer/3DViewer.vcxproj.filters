@@ -94,5 +94,6 @@
     <None Include="teapot.stl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\vcpkg.json" />
   </ItemGroup>
 </Project>
