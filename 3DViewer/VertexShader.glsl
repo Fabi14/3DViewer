@@ -10,10 +10,13 @@ out vec3 vertexNorm;
 uniform mat4 modelTransform;
 uniform mat3 modelTransformNormal;
 
+uniform mat4 viewTransform;
+uniform mat4 projectionTransform;
+
 void main()
 {
-    gl_Position = modelTransform * vec4(_pos, 1.0);
+    gl_Position = projectionTransform * viewTransform * modelTransform * vec4(_pos, 1.0);
     vertexColor = _col;
-    vertexPos = gl_Position.xyz;
+    vertexPos = (modelTransform * vec4(_pos, 1.0)).xyz;
     vertexNorm = normalize(modelTransformNormal * _nor);
 }
