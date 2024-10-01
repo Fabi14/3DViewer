@@ -14,6 +14,8 @@ public:
     bool init();
     void run();
 
+    bool getKey(int key);
+
 private:
     virtual void onCreate() = 0;
     virtual void onUpdate(double deltaTime) = 0;

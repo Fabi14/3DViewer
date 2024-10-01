@@ -114,7 +114,18 @@ void Viewer3D::initCube()
 
 void Viewer3D::handleInput(double deltaTime)
 {
-    //TODO
+    glm::vec3 tmpdir{ m_camera.direction }; //fps steuerung
+    constexpr float speed{ 10.f };
+    const auto fTime{ static_cast<float>(deltaTime) };
+
+    if (getKey(GLFW_KEY_W))
+        m_camera.position += (tmpdir * fTime * speed);
+    if (getKey(GLFW_KEY_S))
+        m_camera.position += (-tmpdir * fTime * speed);
+    if (getKey(GLFW_KEY_A))
+        m_camera.position += (glm::normalize(glm::cross(m_camera.up, tmpdir)) * fTime * speed);
+    if (getKey(GLFW_KEY_D))
+        m_camera.position += (-glm::normalize(glm::cross(m_camera.up, tmpdir)) * fTime * speed);
 }
 
 void Viewer3D::draw()

@@ -86,4 +86,13 @@ void Engine::run()
     glfwTerminate();
 }
 
+bool Engine::getKey(int key)
+{
+    if (m_pWindow)
+    {
+        return glfwGetKey(m_pWindow, key) == GLFW_PRESS;
+    }
+    return false;
+}
+
 

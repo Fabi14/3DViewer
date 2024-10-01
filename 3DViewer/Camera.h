@@ -12,15 +12,15 @@ public:
 
     glm::mat4 getViewTransform()
     {
-        glm::vec3 up{ 0.0f, 1.0f, 0.0f };
+        
         return glm::lookAt(position, position + direction, up);
     }
 
 
     glm::mat4 m_projectionTransform{ 1.f };
 
-private:
     glm::vec3 position { 0.0f, 0.0f, -5.0f };
     glm::vec3 direction { 0.0f, 0.0f, 1.0f };
+    glm::vec3 up{ 0.0f, 1.0f, 0.0f };
 };
 
