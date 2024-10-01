@@ -89,7 +89,8 @@ void Viewer3D::onUpdate()
 
 void Viewer3D::initCube()
 {
-    Mesh mesh{ getCubeMesh() };
+    //Mesh mesh{ getCubeMesh() };
+    Mesh mesh{ MeshImporter::importFile("teapot.stl").value()};
 
     VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
 
