@@ -89,7 +89,8 @@ void Viewer3D::onUpdate()
 
 void Viewer3D::initCube()
 {
-    Mesh mesh{ getCubeMesh() };
+    //Mesh mesh{ getCubeMesh() };
+    Mesh mesh{ MeshImporter::importFile("teapot.stl").value()};
 
     VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
 
@@ -120,7 +121,7 @@ void Viewer3D::draw()
 
         glUniformMatrix4fv(m_cube->m_modelTransformID, 1, GL_FALSE, &m_cube->m_modelTransform[0][0]);
 
-        auto normalMatrix{glm::inverse(glm::mat3(m_cube->m_modelTransformID)) };
+        auto normalMatrix{glm::inverse(glm::mat3(m_cube->m_modelTransform)) };
         glUniformMatrix3fv(m_cube->m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
 
         glDrawElements(GL_TRIANGLES,m_cube->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
