@@ -51,7 +51,7 @@ bool Engine::init()
 #ifdef _DEBUG
     DebugOutput::enable();
 #endif
-    glFrontFace(GL_CW);
+    glFrontFace(GL_CCW);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     onCreate();
