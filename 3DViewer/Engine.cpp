@@ -66,7 +66,10 @@ void Engine::run()
     while (!glfwWindowShouldClose(m_pWindow))
     {
         // clear buffer and draw triangle
-        onUpdate();
+        auto now = glfwGetTime();
+        auto deltaTime = now - m_time;
+        m_time = now;
+        onUpdate(deltaTime);
 
         // Swap front and back buffers 
         glfwSwapBuffers(m_pWindow);

@@ -16,8 +16,9 @@ public:
 
 private:
     virtual void onCreate() = 0;
-    virtual void onUpdate() = 0;
+    virtual void onUpdate(double deltaTime) = 0;
 
     GLFWwindow* m_pWindow;
+    double m_time{};
 };
 

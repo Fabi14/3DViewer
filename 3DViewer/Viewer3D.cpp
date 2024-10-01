@@ -79,10 +79,12 @@ void Viewer3D::onCreate()
     initCube();
 }
 
-void Viewer3D::onUpdate()
+void Viewer3D::onUpdate(double deltaTime)
 {
     float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
     m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .0f));
+
+    handleInput(deltaTime);
 
     draw();
 }
@@ -108,6 +110,11 @@ void Viewer3D::initCube()
     float angle{ 0.f };
     //m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
     m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(-30.f), glm::vec3(1.0f, 0.0f, .0f));
+}
+
+void Viewer3D::handleInput(double deltaTime)
+{
+    //TODO
 }
 
 void Viewer3D::draw()

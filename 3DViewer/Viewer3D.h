@@ -7,10 +7,11 @@
 class Viewer3D : public Engine
 {
 	void onCreate() override;
-	void onUpdate() override;
+    void onUpdate(double deltaTime) override;
 
 private:
     void initCube();
+    void handleInput(double deltaTime);
     void draw();
 
     struct Renderable
