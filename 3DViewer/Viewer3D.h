@@ -2,6 +2,7 @@
 #include "Engine.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/transform.hpp>
+#include "Camera.h"
 
 class Viewer3D : public Engine
 {
@@ -23,6 +24,7 @@ private:
     };
     std::optional<Renderable> m_cube{ std::nullopt };
 
-    GLuint m_lightDirID{};
+
+    Camera m_camera;
 };
 

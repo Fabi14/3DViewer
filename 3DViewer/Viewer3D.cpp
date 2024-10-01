@@ -124,7 +124,7 @@ void Viewer3D::draw()
         auto normalMatrix{glm::inverse(glm::mat3(m_cube->m_modelTransform)) };
         glUniformMatrix3fv(m_cube->m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
 
-        m_cube->m_shaderProgram.addCameraTransform({ 1.f }, { 1.f });
+        m_cube->m_shaderProgram.addCameraTransform(m_camera.m_viewTransform, m_camera.m_projectionTransform);
 
         glDrawElements(GL_TRIANGLES,m_cube->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     }
