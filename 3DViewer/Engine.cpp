@@ -95,4 +95,25 @@ bool Engine::getKey(int key)
     return false;
 }
 
+glm::vec2 Engine::getMousePos()
+{
+    double xpos{};
+    double ypos{};
+
+    if (m_pWindow)
+    {
+        glfwGetCursorPos(m_pWindow, &xpos, &ypos);
+    }
+    return { xpos, ypos };
+}
+
+bool Engine::getMouseButton(int button)
+{
+    if (m_pWindow)
+    {
+       return glfwGetMouseButton(m_pWindow, button) == GLFW_PRESS;
+    }
+    return false;
+}
+
 

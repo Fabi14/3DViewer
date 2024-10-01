@@ -15,6 +15,8 @@ public:
     void run();
 
     bool getKey(int key);
+    glm::vec2 getMousePos();
+    bool getMouseButton(int button);
 
 private:
     virtual void onCreate() = 0;

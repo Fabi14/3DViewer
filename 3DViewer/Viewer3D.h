@@ -27,5 +27,8 @@ private:
 
 
     Camera m_camera;
+
+    bool m_firstMouse{ true };
+    glm::vec2 m_lastMousePos;
 };
 

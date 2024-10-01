@@ -114,7 +114,7 @@ void Viewer3D::initCube()
 
 void Viewer3D::handleInput(double deltaTime)
 {
-    glm::vec3 tmpdir{ m_camera.direction }; //fps steuerung
+    glm::vec3 tmpdir{ m_camera.getDirection()}; //fps steuerung
     constexpr float speed{ 10.f };
     const auto fTime{ static_cast<float>(deltaTime) };
 
@@ -126,6 +126,29 @@ void Viewer3D::handleInput(double deltaTime)
         m_camera.position += (glm::normalize(glm::cross(m_camera.up, tmpdir)) * fTime * speed);
     if (getKey(GLFW_KEY_D))
         m_camera.position += (-glm::normalize(glm::cross(m_camera.up, tmpdir)) * fTime * speed);
+
+    
+    glm::vec2 newMousePos = getMousePos();
+
+    if (m_firstMouse)
+    {
+        m_lastMousePos = newMousePos;
+        m_firstMouse = false;
+    }
+
+    float xoffset{ newMousePos.x - m_lastMousePos.x };
+    float yoffset{ m_lastMousePos.y - newMousePos.y };
+
+    m_lastMousePos = newMousePos;
+
+    float angularVelocity{ 0.1f };
+    xoffset *= angularVelocity;
+    yoffset *= angularVelocity;
+
+    m_camera.yaw += xoffset;
+    m_camera.pitch += yoffset;
+
+    m_camera.pitch = glm::clamp(m_camera.pitch, -89.0f, 89.0f);
 }
 
 void Viewer3D::draw()
