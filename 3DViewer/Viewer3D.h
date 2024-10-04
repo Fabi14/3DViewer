@@ -16,7 +16,8 @@ private:
 
 
     std::vector<Model> m_models{};
-
+    std::optional<ShaderProgram> m_shaderProgramSingleColor;
+    std::optional<ShaderProgram> m_shaderProgramTexture;
 
     Camera m_camera;
 

@@ -25,7 +25,17 @@ void Viewer3D::onCreate()
     // set clear color
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
     std::println("{}", getGlInfoString());
+    glEnable(GL_STENCIL_TEST);
 
+
+    const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
+    const Shader fragmentShaderSingleColor{ "FragmentShaderSingleColor.glsl", GL_FRAGMENT_SHADER };
+    m_shaderProgramSingleColor = ShaderProgram{ vertexShader,fragmentShaderSingleColor };
+
+    const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
+
+    m_shaderProgramTexture = ShaderProgram{ vertexShader, fragmentShader };
+   
     initModels();
 }
 
@@ -43,42 +53,22 @@ void Viewer3D::initModels()
     {
         auto model = Model{ MeshImporter::importFile("..\\Models\\Dinosaur\\Models\\Dinosaur_low.fbx").value() };
 
-        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
-        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
 
-        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
 
-        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
-        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
-
-        model.m_texture = Texture("..\\Models\\Dinosaur\\Textures\\Texture Maps after Baking\\T_Dinosaur_BC.png", model.m_shaderProgram,"baseColorTexture",0);
+        model.m_texture = Texture("..\\Models\\Dinosaur\\Textures\\Texture Maps after Baking\\T_Dinosaur_BC.png", *m_shaderProgramTexture,"baseColorTexture",0);
 
         m_models.push_back(std::move(model));
     }
     {
         auto model = Model{ MeshImporter::importFile("teapot.stl").value() };
 
-        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
-        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
-
-        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
-
-        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
-        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
-
         m_models.push_back(std::move(model));
     }
     {
         auto model = Model{ MeshImporter::getCube()};
 
-        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
-        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
 
-        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
-        model.m_texture = Texture("..\\Models\\SAELogo.png", model.m_shaderProgram, "baseColorTexture", 0);
-
-        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
-        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
+        model.m_texture = Texture("..\\Models\\SAELogo.png", *m_shaderProgramTexture, "baseColorTexture", 0);
 
         model.m_vecRenderables.front().m_modelTransform *= glm::scale(glm::vec3{ 30.f,30.f,30.f }) * glm::translate(glm::vec3{ 2.f,0.f,0.f });
 
@@ -127,18 +117,23 @@ void Viewer3D::handleInput(double deltaTime)
 
 void Viewer3D::draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     if (m_models.empty())
     {
         return;
     }
+
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments pass the stencil test
+    glStencilMask(0xFF); // enable writing to the stencil buffer
+
+    m_shaderProgramTexture->use();
 
     for (const auto& model : m_models)
     {
         for (const auto& renderable : model.m_vecRenderables)
         {
             renderable.m_vertexBuffer.bind();
-            model.m_shaderProgram.use();
 
             if (model.m_texture)
             {
@@ -146,12 +141,10 @@ void Viewer3D::draw()
                         
             }
 
-            glUniformMatrix4fv(model.m_modelTransformID, 1, GL_FALSE, &renderable.m_modelTransform[0][0]);
-
             auto normalMatrix{ glm::inverse(glm::mat3(renderable.m_modelTransform)) };
-            glUniformMatrix3fv(model.m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
+            m_shaderProgramTexture->addModelTransform(renderable.m_modelTransform, normalMatrix);
 
-            model.m_shaderProgram.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+            m_shaderProgramTexture->addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
 
             if (renderable.m_vertexBuffer.getInstanceCount() == 0)
             {
@@ -163,4 +156,44 @@ void Viewer3D::draw()
             }
         }
     }
+
+    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+    glStencilMask(0x00);
+    glDisable(GL_DEPTH_TEST);
+    m_shaderProgramSingleColor->use();
+    const auto scale = glm::scale(glm::vec3{ 1.05f,1.05f,1.05f });
+
+    for (const auto& model : m_models)
+    {
+        for (const auto& renderable : model.m_vecRenderables)
+        {
+            renderable.m_vertexBuffer.bind();
+            //model.m_shaderProgram.use();
+
+            if (model.m_texture)
+            {
+                model.m_texture->bind();
+
+            }
+            auto updatedModelTransform = renderable.m_modelTransform * scale;
+            auto normalMatrix{ glm::inverse(glm::mat3(updatedModelTransform)) };
+
+            m_shaderProgramSingleColor->addModelTransform(updatedModelTransform, normalMatrix);
+            m_shaderProgramSingleColor->addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+
+            if (renderable.m_vertexBuffer.getInstanceCount() == 0)
+            {
+                glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+            }
+            else
+            {
+                glDrawElementsInstanced(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0, renderable.m_vertexBuffer.getInstanceCount());
+            }
+        }
+    }
+
+
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glEnable(GL_DEPTH_TEST);
 }

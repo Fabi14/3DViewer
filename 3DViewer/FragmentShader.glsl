@@ -30,12 +30,15 @@ void main()
     float spec = pow(max(dot(viewDir,refDir),0.),32);
     vec4 specular = specularStrenght* spec * lightColor;
 
-    if(gl_FragCoord.x < 320)
+
+
+//    if(gl_FragCoord.x < 320)
     {
         fragColor = (ambient + diffuse + specular)* texture(baseColorTexture,vertexUVs);
     }
-    else
-    {
-        fragColor = (ambient + diffuse + specular)* vertexColor;
-    }
+//    else
+//    {
+//        fragColor = (ambient + diffuse + specular)* vertexColor;
+//    }
+//
 }
