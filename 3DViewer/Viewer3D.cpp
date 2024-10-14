@@ -4,6 +4,8 @@
 #include <print>
 #include "Mesh.h"
 #include "MeshImporter.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include<glm/gtx/transform.hpp>
 
 namespace {
     std::string getGlInfoString()
@@ -81,9 +83,6 @@ void Viewer3D::onCreate()
 
 void Viewer3D::onUpdate(double deltaTime)
 {
-    float angle{ 1.f };  // TODO: use deltaTime  (glfwGetTime())
-    m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, .0f));
-
     handleInput(deltaTime);
 
     draw();
@@ -92,30 +91,39 @@ void Viewer3D::onUpdate(double deltaTime)
 void Viewer3D::initCube()
 {
     //Mesh mesh{ getCubeMesh() };
-    Mesh mesh{ MeshImporter::importFile("teapot.stl").value()};
+    //Mesh mesh{ MeshImporter::importFile("teapot.stl").value()};
+    {
+        auto model = Model{ MeshImporter::importFile("..\\Models\\Dinosaur\\Models\\Dinosaur_low.fbx").value() };
 
-    VertexBuffer vertexArrayObject{ mesh.m_vertices, mesh.m_indices };
+        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
+        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
 
-    const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER ,&vertexArrayObject };
-    const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
+        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
 
-    m_cube = Renderable{
-        .m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader },
-        .m_vertexBuffer = std::move(vertexArrayObject)
-    };
+        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
+        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
 
-    m_cube->m_modelTransformID = glGetUniformLocation(m_cube->m_shaderProgram.get(), "modelTransform");
-    m_cube->m_modelTransformNormalID = glGetUniformLocation(m_cube->m_shaderProgram.get(), "modelTransformNormal");
-    
-    float angle{ 0.f };
-    //m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_cube->m_modelTransform = glm::rotate(m_cube->m_modelTransform, glm::radians(-30.f), glm::vec3(1.0f, 0.0f, .0f));
+        m_models.push_back(std::move(model));
+    }
+    {
+        auto model = Model{ MeshImporter::importFile("teapot.stl").value() };
+
+        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
+        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
+
+        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
+
+        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
+        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
+
+        m_models.push_back(std::move(model));
+    }
 }
 
 void Viewer3D::handleInput(double deltaTime)
 {
     glm::vec3 tmpdir{ m_camera.getDirection()}; //fps steuerung
-    constexpr float speed{ 10.f };
+    constexpr float speed{ 50.f };
     const auto fTime{ static_cast<float>(deltaTime) };
 
     if (getKey(GLFW_KEY_W))
@@ -154,19 +162,26 @@ void Viewer3D::handleInput(double deltaTime)
 void Viewer3D::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    if (m_cube) // TODO: move code into Renderable
+    if (m_models.empty())
     {
-        m_cube->m_vertexBuffer.bind();
-        m_cube->m_shaderProgram.use();
+        return;
+    }
 
-        glUniformMatrix4fv(m_cube->m_modelTransformID, 1, GL_FALSE, &m_cube->m_modelTransform[0][0]);
+    for (const auto& model : m_models)
+    {
+        for (const auto& renderable : model.m_vecRenderables)
+        {
+            renderable.m_vertexBuffer.bind();
+            model.m_shaderProgram.use();
 
-        auto normalMatrix{glm::inverse(glm::mat3(m_cube->m_modelTransform)) };
-        glUniformMatrix3fv(m_cube->m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
+            glUniformMatrix4fv(model.m_modelTransformID, 1, GL_FALSE, &renderable.m_modelTransform[0][0]);
 
-        m_cube->m_shaderProgram.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+            auto normalMatrix{ glm::inverse(glm::mat3(renderable.m_modelTransform)) };
+            glUniformMatrix3fv(model.m_modelTransformNormalID, 1, GL_TRUE, &normalMatrix[0][0]);
 
-        glDrawElements(GL_TRIANGLES,m_cube->m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+            model.m_shaderProgram.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+
+            glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+        }
     }
 }

@@ -1,11 +1,10 @@
 #pragma once
 #include <string>
 #include <optional>
-#include "Mesh.h"
+#include "Model.h"
 
 class MeshImporter
 {
 public:
-    static std::optional<Mesh> importFile(const std::string& pFile);
+    static std::optional<Model> importFile(const std::string& pFile);
 };
-

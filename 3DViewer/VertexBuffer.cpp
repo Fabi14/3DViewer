@@ -26,7 +26,7 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::ve
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::bind()
+void VertexBuffer::bind() const
 {
     glBindVertexArray(*m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, *m_vbo);

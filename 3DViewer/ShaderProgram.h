@@ -14,7 +14,7 @@ public:
 	void use() const;
 
 	GLuint get() { return *m_id; }
-	void addCameraTransform(const glm::mat4& viewTransform, const glm::mat4& projectionTransform);
+	void addCameraTransform(const glm::mat4& viewTransform, const glm::mat4& projectionTransform) const;
 private:
 	UniqueResource m_id{ glCreateProgram(),[](GLuint id){ glDeleteProgram(id); }};
 

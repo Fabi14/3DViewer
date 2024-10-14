@@ -1,8 +1,8 @@
 #pragma once
 #include "Engine.h"
-#define GLM_ENABLE_EXPERIMENTAL
-#include<glm/gtx/transform.hpp>
+
 #include "Camera.h"
+#include "Model.h"
 
 class Viewer3D : public Engine
 {
@@ -14,16 +14,8 @@ private:
     void handleInput(double deltaTime);
     void draw();
 
-    struct Renderable
-    {
-        ShaderProgram m_shaderProgram;
-        VertexBuffer m_vertexBuffer;
 
-        glm::mat4 m_modelTransform{ glm::scale(glm::mat4{ 1.0f }, glm::vec3{0.2f,0.2f,0.2f}) };
-        GLuint m_modelTransformID{};
-        GLuint m_modelTransformNormalID{};
-    };
-    std::optional<Renderable> m_cube{ std::nullopt };
+    std::vector<Model> m_models{};
 
 
     Camera m_camera;

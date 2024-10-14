@@ -24,7 +24,7 @@ void ShaderProgram::use() const
 
 void ShaderProgram::addCameraTransform(
 	const glm::mat4& viewTransform, 
-	const glm::mat4& projectionTransform)
+	const glm::mat4& projectionTransform) const
 {
 	glUniformMatrix4fv(m_viewTransformId, 1, GL_FALSE, &viewTransform[0][0]);
 	glUniformMatrix4fv(m_projectionTransformId, 1, GL_FALSE, &projectionTransform[0][0]);

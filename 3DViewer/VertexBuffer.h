@@ -11,8 +11,8 @@ public:
 	VertexBuffer(const std::vector<Vertex>& vecVertices);
 	VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices);
 
-	void bind();
-	GLsizei getIndexCount()
+	void bind() const;
+	GLsizei getIndexCount() const
 	{
 		return m_indexCount;
 	}
