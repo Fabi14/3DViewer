@@ -17,58 +17,6 @@ namespace {
         info << "SHADING_LANGUAGE_VERSION: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << '\n';
         return info.str();
     }
-
-    Mesh getCubeMesh()
-    {
-        return Mesh{
-            {
-                //front
-                {{-0.5f, -0.5f, 0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
-                {{-0.5f,  0.5f, 0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
-                {{ 0.5f,  0.5f, 0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, 1.0f}},
-                {{ 0.5f, -0.5f, 0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 0.0f, 1.0f}},
-
-                //back	  
-                {{ 0.5f, -0.5f,-0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
-                {{ 0.5f,  0.5f,-0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
-                {{-0.5f,  0.5f,-0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 0.0f, -1.0f}},
-                {{-0.5f, -0.5f,-0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 0.0f, -1.0f}},
-
-                //left
-                {{-0.5f, -0.5f, -0.5f},	{0.0f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
-                {{-0.5f,  0.5f, -0.5f},	{1.0f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
-                {{-0.5f,  0.5f,  0.5f},	{0.5f,0.5f,0.1f,1.0f}, {-1.0f, 0.0f, 0.0f}},
-                {{-0.5f, -0.5f,  0.5f},	{0.0f,0.5f,1.0f,1.0f}, {-1.0f, 0.0f, 0.0f}},
-
-                //right
-                {{0.5f, -0.5f,  0.5f},	{0.0f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
-                {{0.5f,  0.5f,  0.5f},	{1.0f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
-                {{0.5f,  0.5f, -0.5f},	{0.5f,0.5f,0.1f,1.0f}, {1.0f, 0.0f, 0.0f}},
-                {{0.5f, -0.5f, -0.5f},	{0.0f,0.5f,1.0f,1.0f}, {1.0f, 0.0f, 0.0f}},
-
-                //top
-                {{-0.5f, 0.5f,  0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
-                {{-0.5f, 0.5f, -0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
-                {{ 0.5f, 0.5f, -0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, 1.0f, 0.0f}},
-                {{ 0.5f, 0.5f,  0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, 1.0f, 0.0f}},
-
-                //bottom
-                {{-0.5f, -0.5f, -0.5f},	{0.0f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
-                {{-0.5f, -0.5f,  0.5f},	{1.0f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
-                {{ 0.5f, -0.5f,  0.5f},	{0.5f,0.5f,0.1f,1.0f}, {0.0f, -1.0f, 0.0f}},
-                {{ 0.5f, -0.5f, -0.5f},	{0.0f,0.5f,1.0f,1.0f}, {0.0f, -1.0f, 0.0f}},
-            },
-            {
-
-                0,3,2,0,2,1,
-                0 + 4,3 + 4,2 + 4,0 + 4,2 + 4,1 + 4,
-                0 + 8,3 + 8,2 + 8,0 + 8,2 + 8,1 + 8,
-                0 + 12,3 + 12,2 + 12,0 + 12,2 + 12,1 + 12,
-                0 + 16,3 + 16,2 + 16,0 + 16,2 + 16,1 + 16,
-                0 + 20,3 + 20,2 + 20,0 + 20,2 + 20,1 + 20,
-            } 
-        };
-    }
 }
 
 
@@ -78,7 +26,7 @@ void Viewer3D::onCreate()
     glClearColor(0.f, 0.f, 0.5f, 1.0f);
     std::println("{}", getGlInfoString());
 
-    initCube();
+    initModels();
 }
 
 void Viewer3D::onUpdate(double deltaTime)
@@ -88,7 +36,7 @@ void Viewer3D::onUpdate(double deltaTime)
     draw();
 }
 
-void Viewer3D::initCube()
+void Viewer3D::initModels()
 {
     //Mesh mesh{ getCubeMesh() };
     //Mesh mesh{ MeshImporter::importFile("teapot.stl").value()};
@@ -103,6 +51,8 @@ void Viewer3D::initCube()
         model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
         model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
 
+        model.m_texture = Texture("..\\Models\\Dinosaur\\Textures\\Texture Maps after Baking\\T_Dinosaur_BC.png", model.m_shaderProgram,"baseColorTexture",0);
+
         m_models.push_back(std::move(model));
     }
     {
@@ -115,6 +65,22 @@ void Viewer3D::initCube()
 
         model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
         model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
+
+        m_models.push_back(std::move(model));
+    }
+    {
+        auto model = Model{ MeshImporter::getCube()};
+
+        const Shader vertexShader{ "VertexShader.glsl", GL_VERTEX_SHADER };
+        const Shader fragmentShader{ "FragmentShader.glsl", GL_FRAGMENT_SHADER };
+
+        model.m_shaderProgram = ShaderProgram{ vertexShader, fragmentShader };
+        model.m_texture = Texture("..\\Models\\SAELogo.png", model.m_shaderProgram, "baseColorTexture", 0);
+
+        model.m_modelTransformID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransform");
+        model.m_modelTransformNormalID = glGetUniformLocation(model.m_shaderProgram.get(), "modelTransformNormal");
+
+        model.m_vecRenderables.front().m_modelTransform *= glm::scale(glm::vec3{ 30.f,30.f,30.f }) * glm::translate(glm::vec3{ 2.f,0.f,0.f });
 
         m_models.push_back(std::move(model));
     }
@@ -173,6 +139,12 @@ void Viewer3D::draw()
         {
             renderable.m_vertexBuffer.bind();
             model.m_shaderProgram.use();
+
+            if (model.m_texture)
+            {
+                model.m_texture->bind();
+                        
+            }
 
             glUniformMatrix4fv(model.m_modelTransformID, 1, GL_FALSE, &renderable.m_modelTransform[0][0]);
 

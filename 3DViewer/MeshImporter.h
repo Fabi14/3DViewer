@@ -7,4 +7,6 @@ class MeshImporter
 {
 public:
     static std::optional<Model> importFile(const std::string& pFile);
+
+    static Model getCube();
 };

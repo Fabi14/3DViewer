@@ -3,6 +3,8 @@
 #include "VertexBuffer.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include<glm/gtx/transform.hpp>
+#include "Texture.h"
+#include <optional>
 
 struct Renderable
 {
@@ -16,6 +18,8 @@ struct Model
     ShaderProgram m_shaderProgram;
     GLuint m_modelTransformID{};
     GLuint m_modelTransformNormalID{};
+
+    std::optional<Texture> m_texture;
 
     std::vector<Renderable> m_vecRenderables{};
 };

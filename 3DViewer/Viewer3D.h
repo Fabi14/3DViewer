@@ -10,7 +10,7 @@ class Viewer3D : public Engine
     void onUpdate(double deltaTime) override;
 
 private:
-    void initCube();
+    void initModels();
     void handleInput(double deltaTime);
     void draw();
 

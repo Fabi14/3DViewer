@@ -14,6 +14,9 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4))); //norm
 
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec3)));
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
