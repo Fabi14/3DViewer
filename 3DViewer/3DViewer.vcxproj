@@ -158,6 +158,7 @@ xcopy /y $(ProjectDir)VertexShader.glsl  $(OutDir)</Command>
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UniqueResource.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Viewer3D.cpp" />
   </ItemGroup>

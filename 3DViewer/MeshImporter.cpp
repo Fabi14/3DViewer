@@ -160,10 +160,24 @@ std::optional<Model> MeshImporter::importFile(const std::string& pFile) {
 
 Model MeshImporter::getCube()
 {
+    using namespace std::views;
     Model model;
-    auto mesh{ getCubeMesh()};
+
+
+
+    auto inst = cartesian_product(
+        iota(1,20), iota(1,20), iota(1,20)) 
+        | transform([](auto ijk)->InstanceData 
+            {
+                const auto& [i, j, k] = ijk;
+                return InstanceData({ i * 1.5f,j*1.8f,k *2.f }); 
+            });
+    std::vector<InstanceData> instances(inst.begin(), inst.end());
+
+
+    auto mesh{ getCubeMesh() };
     model.m_vecRenderables.push_back(Renderable{
-                .m_vertexBuffer = VertexBuffer{ mesh.m_vertices, mesh.m_indices },
+                .m_vertexBuffer = VertexBuffer{ mesh.m_vertices, mesh.m_indices,instances},
                 .m_modelTransform = glm::mat4{1.f} });
     return model;
 }

@@ -16,16 +16,6 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
         glVertexAttribPointer(i, attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer); 
     }
 
-    //glEnableVertexAttribArray(0);
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(0)); //pos
-    //glEnableVertexAttribArray(1);
-    //glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3))); //col
-    //glEnableVertexAttribArray(2);
-    //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4))); //norm
-
-    //glEnableVertexAttribArray(3);
-    //glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec3)));
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -38,10 +28,32 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::ve
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices, const std::vector<InstanceData> vecInstanceData) :
+    VertexBuffer(vecVertices, vecIndices)
+{
+    m_instanceCount = vecInstanceData.size();
+    glBindBuffer(GL_ARRAY_BUFFER, *m_instanceVbo);
+    glBufferData(GL_ARRAY_BUFFER, vecInstanceData.size() * sizeof(InstanceData), vecInstanceData.data(), GL_STATIC_DRAW);
+
+    
+    auto layout = InstanceData::getLayout();
+    auto offset = Vertex::getLayout().m_vecAttributs.size();
+
+    for (const auto&& [i, attr] : std::views::enumerate(layout.m_vecAttributs))
+    {
+        glEnableVertexAttribArray(i+ offset);
+        glVertexAttribPointer(i+ offset, attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer);
+        glVertexAttribDivisor(i + offset, 1);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void VertexBuffer::bind() const
 {
     glBindVertexArray(*m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, *m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, *m_instanceVbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_ebo);
 }
 

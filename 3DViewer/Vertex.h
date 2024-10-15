@@ -63,3 +63,18 @@ struct Vertex
 
 	}
 };
+
+struct InstanceData
+{
+	glm::vec3 pos;
+
+	static VertexLayout getLayout()
+	{
+		return { .m_vecAttributs =
+			{
+			createAttribut<InstanceData, glm::vec3>(offsetof(Vertex, pos))
+			}
+		};
+
+	}
+};

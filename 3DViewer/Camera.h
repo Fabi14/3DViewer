@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-    Camera() : m_projectionTransform{ glm::perspective(glm::radians(30.f), 640.f / 480.f, 0.1f, 500.f) }
+    Camera() : m_projectionTransform{ glm::perspective(glm::radians(30.f), 640.f / 480.f, 0.1f, 1000.f) }
     {
     }
 

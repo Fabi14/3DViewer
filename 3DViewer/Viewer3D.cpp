@@ -153,7 +153,14 @@ void Viewer3D::draw()
 
             model.m_shaderProgram.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
 
-            glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+            if (renderable.m_vertexBuffer.getInstanceCount() == 0)
+            {
+                glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+            }
+            else
+            {
+                glDrawElementsInstanced(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0, renderable.m_vertexBuffer.getInstanceCount());
+            }
         }
     }
 }
