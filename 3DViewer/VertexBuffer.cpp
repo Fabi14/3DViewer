@@ -1,5 +1,6 @@
 #include "VertexBuffer.h"
 #include <glad/glad.h>
+#include <ranges>
 
 VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
 {
@@ -7,15 +8,23 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
     glBufferData(GL_ARRAY_BUFFER, vecVertices.size() * sizeof(Vertex), vecVertices.data(), GL_STATIC_DRAW); 
 
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(0)); //pos
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3))); //col
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4))); //norm
+    auto layout = Vertex::getLayout();
 
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec3)));
+    for (const auto&& [i,attr] : std::views::enumerate(layout.m_vecAttributs))
+    {
+        glEnableVertexAttribArray(i);
+        glVertexAttribPointer(i, attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer); 
+    }
+
+    //glEnableVertexAttribArray(0);
+    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(0)); //pos
+    //glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3))); //col
+    //glEnableVertexAttribArray(2);
+    //glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4))); //norm
+
+    //glEnableVertexAttribArray(3);
+    //glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec3)));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
