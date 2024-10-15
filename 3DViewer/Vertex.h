@@ -1,7 +1,5 @@
 #pragma once
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/ext/vector_float4.hpp>
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <type_traits>
 
@@ -66,13 +64,16 @@ struct Vertex
 
 struct InstanceData
 {
-	glm::vec3 pos;
+	glm::mat4 instanceTransform;
 
 	static VertexLayout getLayout()
 	{
 		return { .m_vecAttributs =
 			{
-			createAttribut<InstanceData, glm::vec3>(offsetof(Vertex, pos))
+			createAttribut<InstanceData, glm::vec4>(offsetof(InstanceData, instanceTransform)),
+			createAttribut<InstanceData, glm::vec4>(sizeof(glm::vec4)),
+			createAttribut<InstanceData, glm::vec4>(2 * sizeof(glm::vec4)),
+			createAttribut<InstanceData, glm::vec4>(3 * sizeof(glm::vec4))
 			}
 		};
 

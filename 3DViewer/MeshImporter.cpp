@@ -9,6 +9,9 @@
 #include "DebugOutput.h"
 #include "Mesh.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include<glm/gtx/transform.hpp>
+
 namespace
 {
     glm::vec2 toVec2(const auto& v)
@@ -71,7 +74,7 @@ namespace
 
 
             model.m_vecRenderables.push_back(Renderable{
-                .m_vertexBuffer = VertexBuffer{ mesh.m_vertices, mesh.m_indices },
+                .m_vertexBuffer = VertexBuffer{ mesh.m_vertices, mesh.m_indices},
                 .m_modelTransform = trans * convertMatrix(node->mTransformation)  });
         }
         for (const auto& childNodes : std::span{ node->mChildren,node->mNumChildren })
@@ -170,7 +173,7 @@ Model MeshImporter::getCube()
         | transform([](auto ijk)->InstanceData 
             {
                 const auto& [i, j, k] = ijk;
-                return InstanceData({ i * 1.5f,j*1.8f,k *2.f }); 
+                return InstanceData(glm::translate(glm::mat4{ 1.f },{ i * 50.f,j * 55.f,k * 55.f }));
             });
     std::vector<InstanceData> instances(inst.begin(), inst.end());
 

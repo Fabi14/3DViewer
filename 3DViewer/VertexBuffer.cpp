@@ -12,26 +12,28 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices)
 
     for (const auto&& [i,attr] : std::views::enumerate(layout.m_vecAttributs))
     {
-        glEnableVertexAttribArray(i);
-        glVertexAttribPointer(i, attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer); 
+        glEnableVertexAttribArray(static_cast<GLuint>(i));
+        glVertexAttribPointer(static_cast<GLuint>(i), attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices) :
+//VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices) :
+//    VertexBuffer(vecVertices)
+//{
+//
+//}
+
+VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices, const std::vector<InstanceData>& vecInstanceData) :
     VertexBuffer(vecVertices)
 {
     m_indexCount = static_cast<GLsizei>(vecIndices.size());
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *m_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(Index), vecIndices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
 
-VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::vector<Index>& vecIndices, const std::vector<InstanceData> vecInstanceData) :
-    VertexBuffer(vecVertices, vecIndices)
-{
-    m_instanceCount = vecInstanceData.size();
+    m_instanceCount = static_cast<GLsizei>(vecInstanceData.size());
     glBindBuffer(GL_ARRAY_BUFFER, *m_instanceVbo);
     glBufferData(GL_ARRAY_BUFFER, vecInstanceData.size() * sizeof(InstanceData), vecInstanceData.data(), GL_STATIC_DRAW);
 
@@ -41,9 +43,9 @@ VertexBuffer::VertexBuffer(const std::vector<Vertex>& vecVertices, const std::ve
 
     for (const auto&& [i, attr] : std::views::enumerate(layout.m_vecAttributs))
     {
-        glEnableVertexAttribArray(i+ offset);
-        glVertexAttribPointer(i+ offset, attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer);
-        glVertexAttribDivisor(i + offset, 1);
+        glEnableVertexAttribArray(static_cast<GLuint>(i+ offset));
+        glVertexAttribPointer(static_cast<GLuint>(i+ offset), attr.m_size, attr.m_type, attr.m_normalized, attr.m_stride, attr.m_pointer);
+        glVertexAttribDivisor(static_cast<GLuint>(i + offset), 1);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);

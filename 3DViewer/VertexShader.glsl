@@ -3,7 +3,7 @@ layout (location = 0) in vec3 _pos;
 layout (location = 1) in vec4 _col;
 layout (location = 2) in vec3 _nor;
 layout (location = 3) in vec2 _uvs;
-layout (location = 4) in vec3 _instancePos ;
+layout (location = 4) in mat4 _instancePos ;
 
 out vec4 vertexColor;
 out vec3 vertexPos;
@@ -18,7 +18,7 @@ uniform mat4 projectionTransform;
 
 void main()
 {
-    gl_Position = projectionTransform * viewTransform * modelTransform * vec4(_pos+_instancePos, 1.0);
+    gl_Position = projectionTransform * viewTransform *_instancePos * modelTransform * vec4(_pos, 1.0);
     vertexColor = _col;
     vertexPos = (modelTransform * vec4(_pos, 1.0)).xyz;
     vertexNorm = normalize(modelTransformNormal * _nor);
