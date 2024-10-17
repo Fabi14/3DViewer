@@ -115,6 +115,37 @@ void Viewer3D::handleInput(double deltaTime)
     m_camera.pitch = glm::clamp(m_camera.pitch, -89.0f, 89.0f);
 }
 
+void Viewer3D::drawModel(ShaderProgram& shader, const Model& model, const glm::mat4& mat)
+{
+    shader.use();
+    for (const auto& renderable : model.m_vecRenderables)
+    {
+        renderable.m_vertexBuffer.bind();
+
+        if (model.m_texture)
+        {
+            model.m_texture->bind();
+
+        }
+
+
+        auto updatedModelTransform = renderable.m_modelTransform * mat;
+        auto normalMatrix{ glm::inverse(glm::mat3(updatedModelTransform)) };
+        shader.addModelTransform(updatedModelTransform, normalMatrix);
+
+        shader.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+
+        if (renderable.m_vertexBuffer.getInstanceCount() == 0)
+        {
+            glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
+        }
+        else
+        {
+            glDrawElementsInstanced(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0, renderable.m_vertexBuffer.getInstanceCount());
+        }
+    }
+}
+
 void Viewer3D::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -127,73 +158,19 @@ void Viewer3D::draw()
     glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments pass the stencil test
     glStencilMask(0xFF); // enable writing to the stencil buffer
 
-    m_shaderProgramTexture->use();
 
     for (const auto& model : m_models)
     {
-        for (const auto& renderable : model.m_vecRenderables)
-        {
-            renderable.m_vertexBuffer.bind();
+        drawModel(m_shaderProgramTexture.value(), model);
 
-            if (model.m_texture)
-            {
-                model.m_texture->bind();
-                        
-            }
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilMask(0x00);
 
-            auto normalMatrix{ glm::inverse(glm::mat3(renderable.m_modelTransform)) };
-            m_shaderProgramTexture->addModelTransform(renderable.m_modelTransform, normalMatrix);
+        drawModel(m_shaderProgramSingleColor.value(), model, glm::scale(glm::vec3{ 1.05f,1.05f,1.05f }));
 
-            m_shaderProgramTexture->addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
-
-            if (renderable.m_vertexBuffer.getInstanceCount() == 0)
-            {
-                glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
-            }
-            else
-            {
-                glDrawElementsInstanced(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0, renderable.m_vertexBuffer.getInstanceCount());
-            }
-        }
+        glStencilMask(0xFF);
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glClear(GL_STENCIL_BUFFER_BIT);
     }
-
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00);
-    glDisable(GL_DEPTH_TEST);
-    m_shaderProgramSingleColor->use();
-    const auto scale = glm::scale(glm::vec3{ 1.05f,1.05f,1.05f });
-
-    for (const auto& model : m_models)
-    {
-        for (const auto& renderable : model.m_vecRenderables)
-        {
-            renderable.m_vertexBuffer.bind();
-            //model.m_shaderProgram.use();
-
-            if (model.m_texture)
-            {
-                model.m_texture->bind();
-
-            }
-            auto updatedModelTransform = renderable.m_modelTransform * scale;
-            auto normalMatrix{ glm::inverse(glm::mat3(updatedModelTransform)) };
-
-            m_shaderProgramSingleColor->addModelTransform(updatedModelTransform, normalMatrix);
-            m_shaderProgramSingleColor->addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
-
-            if (renderable.m_vertexBuffer.getInstanceCount() == 0)
-            {
-                glDrawElements(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
-            }
-            else
-            {
-                glDrawElementsInstanced(GL_TRIANGLES, renderable.m_vertexBuffer.getIndexCount(), GL_UNSIGNED_INT, 0, renderable.m_vertexBuffer.getInstanceCount());
-            }
-        }
-    }
-
-
-    glStencilMask(0xFF);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glEnable(GL_DEPTH_TEST);
 }
+

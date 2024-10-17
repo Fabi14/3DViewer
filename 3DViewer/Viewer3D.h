@@ -12,6 +12,7 @@ class Viewer3D : public Engine
 private:
     void initModels();
     void handleInput(double deltaTime);
+    void drawModel(ShaderProgram& shader, const Model& model, const glm::mat4& mat = glm::mat4{ 1.f });
     void draw();
 
 
@@ -23,5 +24,5 @@ private:
 
     bool m_firstMouse{ true };
     glm::vec2 m_lastMousePos;
-};
+}; 
 

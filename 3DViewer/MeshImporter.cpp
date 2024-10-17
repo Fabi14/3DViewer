@@ -166,8 +166,6 @@ Model MeshImporter::getCube()
     using namespace std::views;
     Model model;
 
-
-
     auto inst = cartesian_product(
         iota(1,20), iota(1,20), iota(1,20)) 
         | transform([](auto ijk)->InstanceData 

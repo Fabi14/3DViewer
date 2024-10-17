@@ -29,13 +29,13 @@ bool Engine::init()
     glfwWindowHint(GLFW_CONTEXT_DEBUG, true);
 #endif
 
-    m_pWindow = glfwCreateWindow(640, 480, "Graphics Programming", nullptr, nullptr);
+    m_pWindow = glfwCreateWindow(640*2, 480*2, "Graphics Programming", nullptr, nullptr);
     if (!m_pWindow)
     {
         glfwTerminate();
         return false;
     }
-    glfwSetWindowPos(m_pWindow, 4000, 1500);
+    glfwSetWindowPos(m_pWindow, 4000, 1100);
     glfwSetWindowSizeCallback(m_pWindow, onSize);
 
     // Make the window's context current 
