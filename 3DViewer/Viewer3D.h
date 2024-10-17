@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "Model.h"
+#include "Skybox.h"
 
 class Viewer3D : public Engine
 {
@@ -19,6 +20,8 @@ private:
     std::vector<Model> m_models{};
     std::optional<ShaderProgram> m_shaderProgramSingleColor;
     std::optional<ShaderProgram> m_shaderProgramTexture;
+
+    std::optional<Skybox> m_skybox;
 
     Camera m_camera;
 

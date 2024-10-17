@@ -10,14 +10,12 @@ public:
     {
     }
 
-    glm::mat4 getViewTransform()
+    glm::mat4 getViewTransform() const
     {
-
-
         return glm::lookAt(position, position + getDirection(), up);
     }
 
-    glm::vec3 getDirection()
+    glm::vec3 getDirection() const
     {
         glm::vec3 dir{
     cos(glm::radians(yaw)) * cos(glm::radians(pitch)),

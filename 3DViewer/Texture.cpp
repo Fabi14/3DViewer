@@ -1,26 +1,7 @@
 #include "Texture.h"
-#include <stb_image.h>
-
 #include "ShaderProgram.h"
+#include "Image.h"
 
-struct Image
-{
-	Image(const std::string& filename)
-	{
-		stbi_set_flip_vertically_on_load(true);
-		m_buffer = stbi_load(filename.c_str(), &m_width, &m_height, &m_bitsPerPixel, 4);
-	}
-
-	~Image()
-	{
-		stbi_image_free(m_buffer);
-	}
-
-	stbi_uc* m_buffer{};
-	int m_width{};
-	int m_height{};
-	int m_bitsPerPixel{};
-};
 
 
 Texture::Texture(const std::string& filename, const ShaderProgram& shader, const std::string& uniformname, unsigned int id):m_unit{id}

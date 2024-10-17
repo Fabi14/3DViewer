@@ -147,6 +147,7 @@ xcopy /y $(ProjectDir)VertexShader.glsl  $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DebugOutput.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -155,6 +156,7 @@ xcopy /y $(ProjectDir)VertexShader.glsl  $(OutDir)</Command>
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UniqueResource.cpp" />
@@ -166,11 +168,13 @@ xcopy /y $(ProjectDir)VertexShader.glsl  $(OutDir)</Command>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DebugOutput.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UniqueResource.h" />
     <ClInclude Include="Vertex.h" />
@@ -181,6 +185,8 @@ xcopy /y $(ProjectDir)VertexShader.glsl  $(OutDir)</Command>
     <None Include="..\vcpkg.json" />
     <None Include="FragmentShader.glsl" />
     <None Include="FragmentShaderSingleColor.glsl" />
+    <None Include="SkyboxFragmentShader.glsl" />
+    <None Include="SkyboxVertexShader.glsl" />
     <None Include="teapot.stl" />
     <None Include="VertexShader.glsl" />
   </ItemGroup>

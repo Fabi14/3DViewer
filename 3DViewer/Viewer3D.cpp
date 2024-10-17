@@ -37,6 +37,8 @@ void Viewer3D::onCreate()
     m_shaderProgramTexture = ShaderProgram{ vertexShader, fragmentShader };
    
     initModels();
+
+    m_skybox = Skybox();
 }
 
 void Viewer3D::onUpdate(double deltaTime)
@@ -149,6 +151,7 @@ void Viewer3D::drawModel(ShaderProgram& shader, const Model& model, const glm::m
 void Viewer3D::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
     if (m_models.empty())
     {
         return;
@@ -171,6 +174,12 @@ void Viewer3D::draw()
         glStencilMask(0xFF);
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glClear(GL_STENCIL_BUFFER_BIT);
+    }
+
+
+    if (m_skybox)
+    {
+        m_skybox->draw(m_camera);
     }
 }
 
