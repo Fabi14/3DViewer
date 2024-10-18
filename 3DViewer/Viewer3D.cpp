@@ -136,6 +136,7 @@ void Viewer3D::drawModel(ShaderProgram& shader, const Model& model, const glm::m
         shader.addModelTransform(updatedModelTransform, normalMatrix);
 
         shader.addCameraTransform(m_camera.getViewTransform(), m_camera.m_projectionTransform);
+        shader.setViewPos(m_camera.position);
 
         if (renderable.m_vertexBuffer.getInstanceCount() == 0)
         {

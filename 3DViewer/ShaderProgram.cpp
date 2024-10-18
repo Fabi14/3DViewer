@@ -27,6 +27,8 @@ ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentS
 
 	m_viewTransformId = glGetUniformLocation(*m_id, "viewTransform");
 	m_projectionTransformId = glGetUniformLocation(*m_id, "projectionTransform");
+
+	m_viewPosId = glGetUniformLocation(*m_id, "viewPos");
 }
 
 void ShaderProgram::use() const
@@ -47,5 +49,11 @@ void ShaderProgram::addModelTransform(
 	const glm::mat4& normalTransfor) const
 {
 	glUniformMatrix4fv(m_modelTransformID, 1, GL_FALSE, &modelTransform[0][0]);
-	glUniformMatrix3fv(m_modelTransformNormalID, 1, GL_FALSE, &normalTransfor[0][0]);
+	glUniformMatrix3fv(m_modelTransformNormalID, 1, GL_TRUE, &normalTransfor[0][0]);
+}
+
+void ShaderProgram::setViewPos(
+	const glm::vec3& viewPos) const
+{
+	glUniform3fv(m_viewPosId, 1, &(viewPos.x));
 }

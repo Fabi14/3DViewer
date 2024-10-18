@@ -35,7 +35,7 @@ bool Engine::init()
         glfwTerminate();
         return false;
     }
-    glfwSetWindowPos(m_pWindow, 4000, 1100);
+    //glfwSetWindowPos(m_pWindow, 4000, 1100);
     glfwSetWindowSizeCallback(m_pWindow, onSize);
 
     // Make the window's context current 
@@ -47,6 +47,7 @@ bool Engine::init()
         glfwTerminate();
         return false;
     }
+    glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 #ifdef _DEBUG
     DebugOutput::enable();

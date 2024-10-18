@@ -10,7 +10,7 @@ out vec4 fragColor;
 uniform vec4 lightColor = {1.,1.,1.,1.};
 uniform vec3 lightPos = {100.,100.,0.};
 
-uniform vec3 viewPos = {0.,0.,-1.};
+uniform vec3 viewPos;
 uniform sampler2D baseColorTexture;
 
 void main()
